@@ -16,7 +16,6 @@ import java.util.stream.IntStream;
  * 31.05.2015.
  */
 public class UserMealsUtil {
-    private static Map<LocalDate, Map<Integer, Object>> caloriesPerDayMap = new HashMap<>();
     public static void main(String[] args) {
         List<UserMeal> mealList = Arrays.asList(
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 30,10,0), "Завтрак", 500),
@@ -39,14 +38,9 @@ public class UserMealsUtil {
                                                                     LocalTime startTime,
                                                                     LocalTime endTime,
                                                                     int caloriesPerDay) {
-        //Keys
-        int CAL_KEY = 1;
-        int EXC_KEY = 2;
-
-        //Boolean ref
-        Boolean isExceededRef;
-
         List<UserMealWithExceed> result = new ArrayList<>();
+
+        Map<LocalDate, Integer> caloriesPerDayMap = new HashMap<>();
 
         for (UserMeal userMeal : mealList) {
 
@@ -54,41 +48,21 @@ public class UserMealsUtil {
 
             //Adding new date into the caloriesPerDayMap or checking is calories exceeded for date
             if(caloriesPerDayMap.get(mealDate) == null) {
-                Map<Integer, Object> dataMap = new HashMap<>();
-                dataMap.put(CAL_KEY, userMeal.getCalories());
-                dataMap.put(EXC_KEY, userMeal.getCalories() > caloriesPerDay);
-                caloriesPerDayMap.put(mealDate, dataMap);
-
-                isExceededRef = (Boolean) dataMap.get(EXC_KEY);
+                caloriesPerDayMap.put(mealDate, userMeal.getCalories());
             } else {
-
-                Map<Integer, Object> dataMap = caloriesPerDayMap.get(mealDate);
-                int caloriesSum = ((Integer) dataMap.get(CAL_KEY)) + userMeal.getCalories();
-                dataMap.put(CAL_KEY, caloriesSum);
-                isExceededRef = (Boolean) dataMap.get(EXC_KEY);
+                caloriesPerDayMap.put(mealDate, caloriesPerDayMap.get(mealDate) + userMeal.getCalories());
             }
-
+        }
+        for(UserMeal userMeal : mealList) {
             if(TimeUtil.isBetween(userMeal.getDateTime().toLocalTime(), startTime, endTime)) {
                 UserMealWithExceed userMealWithExceed =
                         new UserMealWithExceed(userMeal.getDateTime(),
                                 userMeal.getDescription(),
                                 userMeal.getCalories(),
-                                (Boolean) caloriesPerDayMap.get(mealDate).get(EXC_KEY));
+                                caloriesPerDayMap.get(userMeal.getDateTime().toLocalDate()) > caloriesPerDay);
                 result.add(userMealWithExceed);
             }
         }
-        for(Map.Entry<LocalDate, Map<Integer, Object>> entry : caloriesPerDayMap.entrySet()) {
-            System.out.println("--------------------");
-            System.out.println(entry.getKey());
-            System.out.println(entry.getValue().get(EXC_KEY));
-            System.out.println(entry.getValue().get(CAL_KEY));
-        }
-
-
-        for(UserMealWithExceed d : result) {
-            System.out.println(d);
-        }
-
         return result;
     }
 }
