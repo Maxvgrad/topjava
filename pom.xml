@@ -19,6 +19,10 @@
         <!-- Logging -->
         <logback.version>1.2.3</logback.version>
         <slf4j.version>1.7.25</slf4j.version>
+
+        <!-- web -->
+        <jstl.version>1.2</jstl.version>
+        <java-time-jsptags.version>1.1.4</java-time-jsptags.version>
     </properties>
 
     <build>
@@ -66,6 +70,16 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>${jstl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sargue</groupId>
+            <artifactId>java-time-jsptags</artifactId>
+            <version>${java-time-jsptags.version}</version>
         </dependency>
     </dependencies>
 

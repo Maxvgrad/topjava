@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -107,5 +108,15 @@ public class MealsUtil {
 
     public static MealWithExceed createWithExceed(Meal meal, boolean exceeded) {
         return new MealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceeded);
+    }
+
+    public static List<MealWithExceed> getWithExceeded(List<Meal> meals, int caloriesPerDay) {
+        return getFilteredWithExceeded(meals, LocalTime.MIN, LocalTime.MAX, caloriesPerDay);
+    }
+
+    public static DateTimeFormatter getFormatter() {
+        return null;
+
+
     }
 }
