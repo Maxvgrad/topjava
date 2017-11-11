@@ -14,10 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-/**
- * Created by Максим on 03.11.2017.
- */
+
 public class MealServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(MealServlet.class);
@@ -37,7 +36,10 @@ public class MealServlet extends HttpServlet {
             case "edit":
             case "add" : {
                 logger.debug("add / edit");
-                req.setAttribute("meal", service.getMockMeal());
+                Meal meal = req.getParameter("id") == null ?
+                        new Meal(LocalDateTime.now(), "", 100) :
+                        service.get(getId(req));
+                req.setAttribute("meal", meal);
                 view = req.getRequestDispatcher(MEAL_JSP);
                 view.forward(req, resp);
                 break;
@@ -59,28 +61,21 @@ public class MealServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        logger.debug("doPost()");
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
 
+        logger.debug("doPost()");
         req.setCharacterEncoding("UTF-8");
 
         Meal meal = new Meal(
                 LocalDateTime.parse(req.getParameter("dateTime")),
                 req.getParameter("description"),
-                Integer.parseInt(req.getParameter("calories"))
-        );
+                Integer.parseInt(req.getParameter("calories")));
 
-        int id = 0;
-        try {
-            id = Integer.parseInt(req.getParameter("id"));
-        } catch (NumberFormatException e) {
-            id = -1;
-        }
+        if(req.getParameter("id") != null)
+            meal.setId(getId(req));
 
-        if(id == -1)
-            service.add(meal);
-        else
-            service.edit(id, meal);
+        service.add(meal);
 
         resp.sendRedirect("meals");
 
@@ -91,5 +86,9 @@ public class MealServlet extends HttpServlet {
     public void init() throws ServletException {
         service = new NoDataBaseService();
         service.initDB();
+    }
+
+    private Integer getId(HttpServletRequest req) {
+        return Integer.parseInt(Objects.requireNonNull(req.getParameter("id")));
     }
 }
