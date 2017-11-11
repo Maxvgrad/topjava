@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.service.NoDataBaseService;
+import ru.javawebinar.topjava.util.MealUtil;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * Created by Максим on 03.11.2017.
@@ -29,67 +29,33 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         logger.debug("redirect to Meals");
-        logger.debug(req.getParameter("action"));
-
         String action = req.getParameter("action");
-        try {
-            Objects.requireNonNull(action);
-        } catch (NullPointerException e) {
-            action = "";
-        }
-
         RequestDispatcher view = null;
-        int id;
-        switch (action) {
 
-            case "edit": {
-                logger.debug("edit");
-                if ((id = Integer.parseInt(req.getParameter("id"))) != -1) {
-                    req.setAttribute("id", id);
-                    req.setAttribute("meal", service.get(id));
-                }
+        switch (action == null ? "" : action) {
 
-                view = req.getRequestDispatcher(MEAL_JSP);
-                break;
-            }
-
+            case "edit":
             case "add" : {
-                logger.debug("add");
+                logger.debug("add / edit");
                 req.setAttribute("meal", service.getMockMeal());
                 view = req.getRequestDispatcher(MEAL_JSP);
+                view.forward(req, resp);
                 break;
             }
-
             case "delete" : {
                 logger.debug("delete");
-                if ((id = Integer.parseInt(req.getParameter("id"))) != -1) {
-
-                    logger.debug("list length = " + service.getMealWithExceedList().size());
-                    service.delete(id);
-                    logger.debug(id + " deleted");
-
-                    logger.debug("list length = " + service.getMealWithExceedList().size());
-
-
-                }
-                logger.debug("before redirect");
-
+                service.delete(Integer.parseInt(req.getParameter("id")));
                 resp.sendRedirect("meals");
-                logger.debug("after redirect");
-
-//                req.setAttribute("mealWithExceedList", service.getMealWithExceedList());
-
-//                view = req.getRequestDispatcher(MEALS_JSP);
-                return;
+                break;
             }
             default : {
                 logger.debug("default");
-                req.setAttribute("mealWithExceedList", service.getMealWithExceedList());
+                req.setAttribute("mealWithExceedList",
+                        MealUtil.getWithExceeded(service.getAll().values(), 2000));
                 view = req.getRequestDispatcher(MEALS_JSP);
+                view.forward(req, resp);
             }
         }
-
-        view.forward(req, resp);
     }
 
     @Override
