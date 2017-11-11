@@ -14,6 +14,7 @@ public class MealWithExceed implements Serializable {
 
     private final Integer id;
 
+
     public MealWithExceed(Integer id, LocalDateTime dateTime, String description, int calories, boolean exceed) {
         this.id = id;
         this.dateTime = dateTime;

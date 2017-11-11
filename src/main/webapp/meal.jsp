@@ -8,22 +8,30 @@
 </head>
 <body>
     <form action="meals" method="post">
-        <input type="text" name="id" value="${id}">
-        <div>
-            Date and Time:
-            <javatime:format value="${meal.dateTime}" pattern="yyyy-MM-dd" var="parsedDate"/>
-            <javatime:format value="${meal.dateTime}" pattern="hh:mm" var="parsedTime"/>
-            <input type="datetime-local" name="dateTime" value="${parsedDate}T${parsedTime}"/>
-        </div>
-        <div>
-            Description:
-            <input type="text" name="description" value="${meal.description}"/>
-        </div>
-        <div>
-            Calories:
-            <input type="number" min="0" name="calories" value="${meal.calories}" />
-        </div>
-        <input type="submit" value="<c:out value="${not empty id ? 'Edit' : 'Add'}"/>"/>
+        <jsp:useBean id="meal" class="ru.javawebinar.topjava.model.MealWithExceed"/>
+        <jsp:useBean id="DateTimeUtil" class="ru.javawebinar.topjava.util.DateTimeUtil"/>
+        <input type="hidden" name="id" value="${id}">
+
+        <dl>
+            <dt>Date and Time:</dt>
+            <dd>
+                <input type="datetime-local"
+                       name="dateTime"
+                       value="${DateTimeUtil.toString(meal.dateTime)}"/>
+            </dd>
+
+            <dt>Description:</dt>
+            <dd>
+                <input type="text" name="description" value="${meal.description}"/>
+            </dd>
+
+            <dt>Calories:</dt>
+            <dd>
+                <input type="number" min="0" name="calories" value="${meal.calories}"/>
+            </dd>
+
+            <input type="submit" value="<c:out value="${not empty meal.id ? 'Edit' : 'Add'}"/>"/>
+        </dl>
     </form>
 </body>
 </html>

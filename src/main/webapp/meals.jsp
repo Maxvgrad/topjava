@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="ru.javawebinar.topjava.util.DateTimeUtil" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
 <html>
@@ -21,9 +22,9 @@
     </thead>
     <tbody>
         <c:forEach items="${mealWithExceedList}" var="meal" varStatus="loop">
-            <jsp:useBean id="meal" class="ru.javawebinar.topjava.model.MealWithExceed"
+            <jsp:useBean id="meal" class="ru.javawebinar.topjava.model.MealWithExceed"/>
             <tr class="${meal.exceed ? "exceed" : "normal"}">
-                <td><c:out value="${meal.getDateTime().toLocalTime()}"/></td>
+                <td><%=DateTimeUtil.toString(meal.getDateTime())%></td>
                 <td><c:out value="${meal.description}"/></td>
                 <td><c:out value="${meal.calories}"/></td>
                 <td><a href="meals?action=edit&id=<c:out value="${loop.index}"/>">edit</a></td>
