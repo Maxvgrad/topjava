@@ -3,6 +3,7 @@
 <%@ taglib uri="http://sargue.net/jsptags/time" prefix="javatime" %>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="resources/stylesheets/meals.css"/>
     <title>Meals</title>
 </head>
 <p>
@@ -10,23 +11,26 @@
 <h2>Meals</h2>
 
 <table>
-    <tr>
-        <th>Date:</th>
-        <th>Time:</th>
-        <th>Description:</th>
-        <th>Calories:</th>
-        <th colspan="2">Action:</th>
-    </tr>
-    <c:forEach items="${mealWithExceedList}" var="meal" varStatus="loop">
+    <thead>
         <tr>
-            <td><c:out value="${meal.getDateTime().toLocalDate()}"/></td>
-            <td><c:out value="${meal.getDateTime().toLocalTime()}"/></td>
-            <td><c:out value="${meal.getDescription()}"/></td>
-            <td><c:out value="${meal.getCalories()}"/></td>
-            <td><a href="meals?action=edit&id=<c:out value="${loop.index}"/>">edit</a></td>
-            <td><a href="meals?action=delete&id=<c:out value="${loop.index}"/>">delete</a></td>
+            <th>Time stamp:</th>
+            <th>Description:</th>
+            <th>Calories:</th>
+            <th colspan="2">Action:</th>
         </tr>
-    </c:forEach>
+    </thead>
+    <tbody>
+        <c:forEach items="${mealWithExceedList}" var="meal" varStatus="loop">
+            <jsp:useBean id="meal" class="ru.javawebinar.topjava.model.MealWithExceed"
+            <tr class="${meal.exceed ? "exceed" : "normal"}">
+                <td><c:out value="${meal.getDateTime().toLocalTime()}"/></td>
+                <td><c:out value="${meal.description}"/></td>
+                <td><c:out value="${meal.calories}"/></td>
+                <td><a href="meals?action=edit&id=<c:out value="${loop.index}"/>">edit</a></td>
+                <td><a href="meals?action=delete&id=<c:out value="${loop.index}"/>">delete</a></td>
+            </tr>
+        </c:forEach>
+    </tbody>
 </table>
 <p><a href="meals?action=add">Add meal</a></p>
 </body>

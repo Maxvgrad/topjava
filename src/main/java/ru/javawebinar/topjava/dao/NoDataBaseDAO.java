@@ -1,23 +1,20 @@
 package ru.javawebinar.topjava.dao;
 
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.util.MealUtil;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Максим on 05.11.2017.
  */
 public class NoDataBaseDAO implements MealDAO {
     private CopyOnWriteArrayList<Meal> mealDB;
+    private static ConcurrentMap<Integer, Meal> repository;
 
     @Override
     public CopyOnWriteArrayList<Meal> getMealList() {
@@ -26,6 +23,7 @@ public class NoDataBaseDAO implements MealDAO {
 
     @Override
     public void initDB() {
+        repository = MealUtil.
         mealDB = new CopyOnWriteArrayList<>();
         Arrays.asList(
                 new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),

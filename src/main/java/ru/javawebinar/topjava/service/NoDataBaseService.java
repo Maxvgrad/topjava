@@ -5,7 +5,7 @@ import ru.javawebinar.topjava.dao.MealDAO;
 import ru.javawebinar.topjava.dao.NoDataBaseDAO;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
-import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.MealUtil;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -14,17 +14,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Created by Максим on 05.11.2017.
  */
 public class NoDataBaseService implements MealService {
-    private MealDAO mealDAO = new NoDataBaseDAO();
+    private MealDAO mealDAO;
 
     @Override
     public void initDB() {
+        mealDAO = new NoDataBaseDAO();
         mealDAO.initDB();
     }
 
     @Override
     public CopyOnWriteArrayList<MealWithExceed> getMealWithExceedList() {
         return new CopyOnWriteArrayList<>(
-                MealsUtil.getWithExceeded(mealDAO.getMealList(), 2000));
+                MealUtil.getWithExceeded(mealDAO.getMealList(), 2000));
     }
 
     @Override

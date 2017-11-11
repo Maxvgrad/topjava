@@ -21,7 +21,7 @@ import java.util.Objects;
 public class MealServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(MealServlet.class);
-    private static final MealService service = new NoDataBaseService();
+    private static MealService service;
     private static final String MEALS_JSP = "meals.jsp";
     private static final String MEAL_JSP = "meal.jsp";
 
@@ -123,6 +123,7 @@ public class MealServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
+        service = new NoDataBaseService();
         service.initDB();
     }
 }
