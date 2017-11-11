@@ -1,3 +1,4 @@
+<%@ page import="ru.javawebinar.topjava.util.DateTimeUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
@@ -8,16 +9,15 @@
 </head>
 <body>
     <form action="meals" method="post">
-        <jsp:useBean id="meal" class="ru.javawebinar.topjava.model.MealWithExceed"/>
-        <jsp:useBean id="DateTimeUtil" class="ru.javawebinar.topjava.util.DateTimeUtil"/>
-        <input type="hidden" name="id" value="${id}">
+        <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.MealWithExceed"/>
+        <input type="hidden" name="id" value="${meal.id}">
 
         <dl>
             <dt>Date and Time:</dt>
             <dd>
                 <input type="datetime-local"
                        name="dateTime"
-                       value="${DateTimeUtil.toString(meal.dateTime)}"/>
+                       value="<%=DateTimeUtil.toString(meal.getDateTime())%>"/>
             </dd>
 
             <dt>Description:</dt>

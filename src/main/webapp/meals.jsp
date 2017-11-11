@@ -22,7 +22,7 @@
     </thead>
     <tbody>
         <c:forEach items="${mealWithExceedList}" var="meal" varStatus="loop">
-            <jsp:useBean id="meal" class="ru.javawebinar.topjava.model.MealWithExceed"/>
+            <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.model.MealWithExceed"/>
             <tr class="${meal.exceed ? "exceed" : "normal"}">
                 <td><%=DateTimeUtil.toString(meal.getDateTime())%></td>
                 <td><c:out value="${meal.description}"/></td>
