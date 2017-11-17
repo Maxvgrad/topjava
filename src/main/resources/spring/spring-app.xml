@@ -20,4 +20,17 @@
 
     <context:component-scan base-package="ru.javawebinar.**.web"/>
 
+    <!--<bean id="abstractUserController" class="ru.javawebinar.topjava.web.user.AbstractUserController" abstract="true">-->
+        <!--<property name="service" ref="mealService"/>-->
+    <!--</bean>-->
+    
+    <!--<bean id="mealRestController" class="ru.javawebinar.topjava.web.meal.MealRestController" parent="abstractUserController"/>-->
+    <!--<bean id="mealRestController" class="ru.javawebinar.topjava.web.meal.MealRestController">-->
+        <!--<property name="service" ref="mealService"/>-->
+    <!--</bean>-->
+    <!--<bean id="mealService" class="ru.javawebinar.topjava.service.MealServiceImpl">-->
+        <!--<property name="repository" ref="mealRepository"/>-->
+    <!--</bean>-->
+    <!--<bean id="mealRepository" class="ru.javawebinar.topjava.repository.mock.InMemoryMealRepositoryImpl"></bean>-->
+
 </beans>

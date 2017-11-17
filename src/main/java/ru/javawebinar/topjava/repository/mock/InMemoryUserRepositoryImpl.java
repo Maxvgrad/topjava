@@ -9,16 +9,16 @@ import ru.javawebinar.topjava.repository.UserRepository;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryUserRepositoryImpl implements UserRepository {
     private static final Logger log = LoggerFactory.getLogger(InMemoryUserRepositoryImpl.class);
-    private static Map<Integer, User> userMap;
+    private static Map<Integer, User> userMap = new ConcurrentHashMap<>();
+    private static AtomicInteger counter = new AtomicInteger();
 
-    {
-        //TODO initialize the userMap
-    }
 
     @Override
     public boolean delete(int id) {
@@ -33,6 +33,8 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     @Override
     public User save(User user) {
         log.info("save {}", user);
+        if (user.isNew())
+            user.setId(counter.getAndAdd(1));
         return userMap.put(user.getId(), user);
     }
 
