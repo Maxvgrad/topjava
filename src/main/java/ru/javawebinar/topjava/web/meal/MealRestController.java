@@ -9,7 +9,6 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealWithExceed;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Controller
@@ -21,16 +20,16 @@ public class MealRestController {
 
     public Meal save(Meal meal) {
         LOG.info("save{}", meal);
-        return service.save(meal, AuthorizedUser.id());
+        return service.save(meal);
     }
 
     public void delete(int id) {
         LOG.info("delete{}", id);
-        service.delete(id, AuthorizedUser.id());
+        service.delete(id);
     }
 
     public Meal get(int id) {
-        return service.get(id, AuthorizedUser.id());
+        return service.get(id);
     }
 
     public Collection<MealWithExceed> getAll() {
@@ -40,13 +39,5 @@ public class MealRestController {
     public void setService(MealService service) {
         this.service = service;
     }
-
-    public void setFilter(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        service.setFilter(startDateTime, endDateTime);
-    }
-    public LocalDateTime getFilter() {
-        return service.getFilter();
-    }
-
 
 }

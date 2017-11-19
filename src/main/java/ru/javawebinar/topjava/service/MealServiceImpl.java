@@ -1,36 +1,42 @@
 package ru.javawebinar.topjava.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.to.MealWithExceed;
 import ru.javawebinar.topjava.util.MealsUtil;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Service
 public class MealServiceImpl implements MealService {
-
-    private LocalDateTime startDateTime = LocalDateTime.MIN;
-    private LocalDateTime endDateTime = LocalDateTime.MAX;
+    private static final Logger LOG = LoggerFactory.getLogger(MealServiceImpl.class);
 
     @Autowired
     private MealRepository repository;
 
     @Override
-    public Meal save(Meal meal, int userId) {
+    public Meal save(Meal meal) {
+        int userId = AuthorizedUser.id();
+        LOG.info("Class{} save{}", this.getClass().getSimpleName(), meal.getId());
         return repository.save(meal, userId);
     }
 
     @Override
-    public void delete(int id, int userId) {
+    public void delete(int id) {
+        int userId = AuthorizedUser.id();
+        LOG.info("Class{} delete{}", getClass().getSimpleName(), id);
         repository.delete(id, userId);
     }
 
     @Override
-    public Meal get(int id, int userId) {
+    public Meal get(int id) {
+        int userId = AuthorizedUser.id();
+        LOG.info("Class{} get{}", getClass().getSimpleName(), id);
         return repository.get(id, userId);
     }
 
@@ -43,14 +49,4 @@ public class MealServiceImpl implements MealService {
         this.repository = repository;
     }
 
-    @Override
-    public void setFilter(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        this.startDateTime = startDateTime;
-        this.endDateTime = endDateTime;
-    }
-
-    @Override
-    public LocalDateTime getFilter() {
-        return startDateTime;
-    }
 }

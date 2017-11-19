@@ -20,7 +20,7 @@
 <section>
     <h3><a href="index.html">Home</a></h3>
     <h2>Meals</h2>
-    <form action="filter" method="post">
+    <form action="meals" method="post">
         <div name="form-group">
             <label>From date:</label>
             <input type="date" name="startDate"/>
