@@ -20,22 +20,22 @@
 <section>
     <h3><a href="index.html">Home</a></h3>
     <h2>Meals</h2>
-    <form action="meals" method="post">
+    <form action="meals?action=filter" method="post">
         <div name="form-group">
             <label>From date:</label>
-            <input type="date" name="startDate"/>
+            <input type="date" name="startDate" value="${param.startDate}"/>
         </div>
         <div name="form-group">
             <label>To date:</label>
-            <input type="date" name="endDate"/>
+            <input type="date" name="endDate" value="${param.endDate}"/>
         </div>
         <div name="form-group">
             <label>From time:</label>
-            <input type="time" name="startTime"/>
+            <input type="time" name="startTime" value="${param.startTime}"/>
         </div>
         <div name="form-group">
             <label>To time:</label>
-            <input type="time" name="endTime"/>
+            <input type="time" name="endTime" value="${param.endTime}"/>
         </div>
         <input type="submit" value="Filter"/>
     </form>

@@ -4,11 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealWithExceed;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collection;
 
 @Controller
@@ -32,12 +33,12 @@ public class MealRestController {
         return service.get(id);
     }
 
-    public Collection<MealWithExceed> getAll() {
-        return service.getAll(AuthorizedUser.id());
+    public Collection<MealWithExceed> getBetween(LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
+        return service.getBetween(startDate, endDate, startTime, endTime);
     }
 
-    public void setService(MealService service) {
-        this.service = service;
+    public Collection<MealWithExceed> getAll() {
+        return service.getAll();
     }
 
 }
