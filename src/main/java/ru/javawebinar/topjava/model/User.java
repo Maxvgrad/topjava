@@ -9,7 +9,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Set;
 
 import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
@@ -56,8 +55,8 @@ public class User extends AbstractNamedEntity {
     @Range(min = 10, max = 10000)
     private int caloriesPerDay = DEFAULT_CALORIES_PER_DAY;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<Meal> meals;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<Meal> meals;
 
     public User() {
     }
@@ -103,6 +102,10 @@ public class User extends AbstractNamedEntity {
         this.enabled = enabled;
     }
 
+    public Set<Meal> getMeals() {
+        return meals;
+    }
+
     public int getCaloriesPerDay() {
         return caloriesPerDay;
     }
@@ -123,10 +126,6 @@ public class User extends AbstractNamedEntity {
         return password;
     }
 
-    public List<Meal> getMeals() {
-        return meals;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -138,4 +137,13 @@ public class User extends AbstractNamedEntity {
                 ", caloriesPerDay=" + caloriesPerDay +
                 '}';
     }
+
+//    @Override
+//    public int hashCode() {
+//        return email.length();
+//    }
+//
+//    public boolean equals(User o) {
+//        return email.equals(o.email);
+//    }
 }

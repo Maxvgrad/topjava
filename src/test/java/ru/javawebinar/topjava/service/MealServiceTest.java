@@ -37,7 +37,10 @@ public class MealServiceTest {
 
     @Test
     public void testDelete() throws Exception {
-        log.info("testDelete()");
+//        log.info("testDelete()");
+//        log.info("service.getAll().size() {}", service.getAll(USER_ID).size());
+
+//        service.getAll(USER_ID).forEach(meal -> log.debug(" " + meal));
         service.delete(MEAL1_ID, USER_ID);
         assertMatch(service.getAll(USER_ID), MEAL6, MEAL5, MEAL4, MEAL3, MEAL2);
     }

@@ -55,7 +55,7 @@ public class MealsUtil {
         return mealsWithExceeded;
     }
 
-    public static List<MealWithExceed> getFilteredWithExceededInOnePass(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    public static List<MealWithExceed> getFilteredWithExceededInOnePass(List<Meal> meals, Lotopjava@localhostcalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Collection<List<Meal>> list = meals.stream()
                 .collect(Collectors.groupingBy(Meal::getDate)).values();
 
