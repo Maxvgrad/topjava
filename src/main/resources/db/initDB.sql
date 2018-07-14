@@ -11,7 +11,7 @@ CREATE TABLE users
   name             VARCHAR                 NOT NULL,
   email            VARCHAR                 NOT NULL,
   password         VARCHAR                 NOT NULL,
-  registered       TIMESTAMP DEFAULT now() NOT NULL,
+  reg_date         TIMESTAMP DEFAULT now() NOT NULL,
   enabled          BOOL DEFAULT TRUE       NOT NULL,
   calories_per_day INTEGER DEFAULT 2000    NOT NULL
 );
@@ -31,6 +31,6 @@ CREATE TABLE meals
   id INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
   description VARCHAR NOT NULL,
   calories INTEGER DEFAULT 2000,
-  dateTime TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+  meal_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE RESTRICT
 );
