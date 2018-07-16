@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
@@ -16,16 +17,14 @@ import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 public class JdbcMealRepositoryImpl implements MealRepository {
-
-    private static final Logger LOG = LoggerFactory.getLogger(JdbcMealRepositoryImpl.class);
-
-    private final static BeanPropertyRowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(JdbcMealRepositoryImpl.class);
+    private final static BeanPropertyRowMapper<Meal> ROW_MAPPER =
+                                BeanPropertyRowMapper.newInstance(Meal.class);
     private final SimpleJdbcInsert simpleJdbcInsert;
-
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
@@ -37,13 +36,14 @@ public class JdbcMealRepositoryImpl implements MealRepository {
                 .usingGeneratedKeyColumns("id");
     }
 
+
+
     @Override
-    public Meal save(Meal meal, int userId) {
-        LOG.info("userId {}", userId);
-        LOG.info("meal {}", meal);
+    public Boolean save(Meal meal) {
+        LOGGER.info("Save meal: {}", meal);
         MapSqlParameterSource parameterMap = new MapSqlParameterSource();
 
-        parameterMap.addValue("user_id", userId);
+        parameterMap.addValue("user_id", AuthorizedUser.getId());
         parameterMap.addValue("description", meal.getDescription());
         parameterMap.addValue("calories", meal.getCalories());
         parameterMap.addValue("datetime", meal.getDateTime());
@@ -59,30 +59,34 @@ public class JdbcMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public boolean delete(int id, int userId) {
+    public Boolean remove(Integer mealId) {
+        Objects.requireNonNull(mealId);
+        LOGGER.info("Remove meal id: {}", mealId);
+        String QUERY = "DELETE FROM meals WHERE id=? AND user_id=?";
         return namedParameterJdbcTemplate
                 .getJdbcOperations()
-                .update("DELETE FROM meals WHERE id=? AND user_id=?", id, userId) != 0;
+                .update(QUERY, mealId, AuthorizedUser.getId()) != 0;
     }
 
     @Override
-    public Meal get(int id, int userId) {
+    public Meal getById(Integer id) {
+        String QUERY = "SELECT m.* FROM meals m WHERE m.id=? AND m.user_id=?";
         List<Meal> meals = namedParameterJdbcTemplate
                 .getJdbcOperations()
-                .query("SELECT id, description, datetime, calories FROM meals WHERE id=? AND user_id=?",
-                        ROW_MAPPER, id, userId);
+                .query(QUERY, ROW_MAPPER, id, AuthorizedUser.getId());
 
         return DataAccessUtils.singleResult(meals);
     }
 
     @Override
-    public List<Meal> getAll(int userId) {
-        LOG.info("getAll()");
-        List<Meal> meals = namedParameterJdbcTemplate
-                .getJdbcOperations()
-                .query("SELECT id, description, calories, datetime FROM meals WHERE user_id=? ORDER BY datetime",
-                        (ResultSet resultSet, int i) -> {
-                            LOG.info("datetime = {}", resultSet.getString("datetime"));
+    public List<Meal> getAllByUserId(Integer userId) {
+        Objects.requireNonNull(userId);
+        LOGGER.info("Get all user id '{}' meals", userId);
+        String QUERY = "SELECT id, description, calories, datetime " +
+                        "FROM meals WHERE user_id=? ORDER BY datetime";
+        List<Meal> meals = namedParameterJdbcTemplate.getJdbcOperations()
+                .query(QUERY, (ResultSet resultSet, int i) -> {
+                            LOGGER.info("datetime = {}", resultSet.getString("datetime"));
                             LocalDateTime dateTime =
                                     LocalDateTime.parse(resultSet.getString("datetime"),
                                             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -92,14 +96,14 @@ public class JdbcMealRepositoryImpl implements MealRepository {
                                 meal.setId(resultSet.getInt("id"));
                                 return meal;}
                                 , userId);
-        LOG.info("meals.size() = {}", meals.size());
-//        LOG.info("meals.get(0) = {}", meals.get(0));
+        LOGGER.info("meals.size() = {}", meals.size());
         return meals;
     }
 
     @Override
-    public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-        LOG.info("getBetween()");
+    public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, Integer userId) {
+
+        LOGGER.info("getBetween()");
         List<Meal> meals = namedParameterJdbcTemplate
                 .getJdbcOperations()
                 .query("SELECT id, description, datetime, calories " +
