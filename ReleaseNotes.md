@@ -37,7 +37,7 @@
   - обработку запрета модификации системный юзеров через универсальный `ApplicationException`
  - рефакторинг
    - сделал `@EntityGraph` через `attributePaths`
-   - реализаовал обработку дублирования `user.email` и `meal.dateTime` через [Controller Based Exception Handling](https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc#controller-based-exception-handling)
+   - реализаовал обработку дублирования `user.email` и `meal.mealDate` через [Controller Based Exception Handling](https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc#controller-based-exception-handling)
    - поменял отключение транзакционности в тестах через `@Transactional(propagation = Propagation.NEVER)`
    - сделал выбор в сервлете через switch
    - [все логгирование сделал через {} форматирование](http://stackoverflow.com/questions/10555409/logger-slf4j-advantages-of-formatting-with-instead-of-string-concatenation) и поправил его в контроллерах (поле проверки id)
@@ -71,7 +71,7 @@
   - cделал <a href="http://stackoverflow.com/questions/436411/where-should-i-put-script-tags-in-html-markup/24070373#24070373">загрузку скриптов асинхронной</a>
   - фильтр еды сделал в [Bootstrap Panels](http://getbootstrap.com/components/#panels)
   - вместо `Persistable` ввел интерфейс `HasId` и наследую от него как Entity, так и TO
-  - сделал универсальную обработку исключений дублирования email и dateTime
+  - сделал универсальную обработку исключений дублирования email и mealDate
 
 ### Topjava 8
 - добавил:

@@ -9,11 +9,8 @@ import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
 public class User extends AbstractNamedEntity {
 
     private String email;
-
     private String password;
-
     private boolean enabled = true;
-
     private Date registered = new Date();
 
     private Set<Role> roles;

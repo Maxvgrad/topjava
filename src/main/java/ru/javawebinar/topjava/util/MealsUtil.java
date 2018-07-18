@@ -34,18 +34,18 @@ public class MealsUtil {
     public static List<MealWithExceed> getFilteredWithExceeded(Collection<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
                 .collect(
-                        Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories))
+                        Collectors.groupingBy(Meal::getMealDate, Collectors.summingInt(Meal::getCalories))
 //                      Collectors.toMap(Meal::getDate, Meal::getCalories, Integer::sum)
                 );
 
         return meals.stream()
-                .filter(meal -> DateTimeUtil.isBetween(meal.getTime(), startTime, endTime))
-                .map(meal -> createWithExceed(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
+                .filter(meal -> DateTimeUtil.isBetween(meal.getMealTime(), startTime, endTime))
+                .map(meal -> createWithExceed(meal, caloriesSumByDate.get(meal.getMealDate()) > caloriesPerDay))
                 .collect(toList());
     }
 
     private static MealWithExceed createWithExceed(Meal meal, boolean exceeded) {
-        return new MealWithExceed(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceeded);
+        return new MealWithExceed(meal.getId(), meal.getMealDateTime(), meal.getDescription(), meal.getCalories(), exceeded);
     }
 
 /*
@@ -82,7 +82,7 @@ public class MealsUtil {
 
             private void accumulate(Meal meal) {
                 dailySumOfCalories += meal.getCalories();
-                if (DateTimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime)) {
+                if (DateTimeUtil.isBetween(meal.getMealDate().toLocalTime(), startTime, endTime)) {
                     dailyMeals.add(meal);
                 }
             }

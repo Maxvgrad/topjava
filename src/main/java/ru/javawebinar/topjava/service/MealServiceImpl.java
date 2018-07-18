@@ -25,12 +25,12 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public Meal get(int id, int userId) {
-        return checkNotFoundWithId(repository.get(id, userId), id);
+        return checkNotFoundWithId(repository.getById(id), id);
     }
 
     @Override
     public void delete(int id, int userId) {
-        checkNotFoundWithId(repository.delete(id, userId), id);
+        checkNotFoundWithId(repository.remove(id), id);
     }
 
     @Override
@@ -41,16 +41,18 @@ public class MealServiceImpl implements MealService {
     @Override
     public List<Meal> getAll(int userId) {
         LOG.info("getAll() userId = {}", userId);
-        return repository.getAll(userId);
+        return repository.getAllByUserId(userId);
     }
 
     @Override
     public Meal update(Meal meal, int userId) {
-        return checkNotFoundWithId(repository.save(meal, userId), meal.getId());
+        checkNotFoundWithId(repository.save(meal), meal.getId());
+        return meal;
     }
 
     @Override
     public Meal create(Meal meal, int userId) {
-        return repository.save(meal, userId);
+        checkNotFoundWithId(repository.save(meal), meal.getId());
+        return meal;
     }
 }
